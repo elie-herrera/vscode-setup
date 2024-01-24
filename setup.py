@@ -1,9 +1,11 @@
-#!/Library/Frameworks/Python.framework/Versions/2.7/bin/python
+# Shebang line for Python 3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import os
 import subprocess
 import json
+import sys
 
 options = { 'settings': '', 'extensions': '', }
 
@@ -56,35 +58,32 @@ extensions = [
 
 # Customization for VSCode
 if options['settings'] == 'y':
-	print ("Customizing VS Code User Settings")
+	print("Customizing VS Code User Settings")
 	
 	# Check if VSCode is installed by looking for the application
 	if not os.path.exists('/Applications/Visual Studio Code.app'):
 		print("VS Code is not installed. Please install it first.")
+		sys.exit(1)
 
 	# Ensure VSCode settings directory exists
-	# os.makedirs(os.path.dirname(vscode_settings_path), exist_ok=True)
 	if not os.path.exists(os.path.dirname(vscode_settings_path)):
 		os.makedirs(os.path.dirname(vscode_settings_path))
 
-	# Update settings.json
-	# Set some default settings
-	if not os.path.isfile( vscode_settings_path ):
-		with open( vscode_settings_path, 'w+') as f:
-			
-			print("Configuring Default Settings")
-
+	# Read existing settings and update them
+	prefs = {}
+	if os.path.isfile(vscode_settings_path):
+		with open(vscode_settings_path, 'r') as f:
 			prefs_plain = f.read()
-			prefs = {}
-			
-			if prefs_plain != '':
+			if prefs_plain:
 				prefs = json.loads(prefs_plain)
+	
+	for key, value in settings_json.items():
+		prefs.setdefault(key, value)
 
-			for key, value in settings_json.items():
-				if key not in prefs:
-					prefs[key] = value
-
-			f.write(json.dumps(prefs, sort_keys=True, indent=4, separators=(',', ': ')))
+	# Write updated settings
+	with open(vscode_settings_path, 'w') as f:
+		print("Configuring Default Settings")
+		f.write(json.dumps(prefs, sort_keys=True, indent=4, separators=(',', ': ')))
 
 # Install extensions
 if options['extensions'] == 'y':

@@ -1,15 +1,10 @@
 # VS Code Setup
-## PixelSpoke
 
 This will install the basic configuration for VS Code and Extensions we use at PixelSpoke
 
+Make sure you have Python 3 installed.
+
 Open Terminal, type this and press enter:
-
-```shell
-/usr/bin/python -c "$(curl -fsSL https://raw.githubusercontent.com/elie-herrera/vscode-setup/main/setup.py)"
-```
-
-or use this if Python version >= 3
 
 ```shell
 /usr/local/bin/python3 -c "$(curl -fsSL https://raw.githubusercontent.com/elie-herrera/VS-Code-Setup/main/setup.py)"
