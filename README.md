@@ -9,6 +9,12 @@ Open Terminal, type this and press enter:
 /usr/bin/python -c "$(curl -fsSL https://raw.githubusercontent.com/elie-herrera/vscode-setup/main/setup.py)"
 ```
 
+or use this if Python version >= 3
+
+```shell
+/usr/local/bin/python3 -c "$(curl -fsSL https://raw.githubusercontent.com/elie-herrera/VS-Code-Setup/main/setup.py)"
+```
+
 Follow the instructions and that's it :D
 
 ### Basic Settings:
