@@ -1,6 +1,6 @@
 #!/Library/Frameworks/Python.framework/Versions/2.7/bin/python
 # -*- coding: utf-8 -*-
-# /usr/bin/python -c "$(curl -fsSL https://raw.githubusercontent.com/elie-herrera/setup/master/setup.py)"
+# /usr/bin/python -c "$(curl -fsSL https://raw.githubusercontent.com/elie-herrera/VS-Code-Setup/main/setup.py)"
 
 import os
 import subprocess

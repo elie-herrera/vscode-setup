@@ -6,7 +6,7 @@ This will install the basic configuration for VS Code and Extensions we use at P
 Open Terminal, type this and press enter:
 
 ```shell
-/usr/bin/python -c "$(curl -fsSL https://raw.githubusercontent.com/elie-herrera/setup/master/setup.py)"
+/usr/bin/python -c "$(curl -fsSL https://raw.githubusercontent.com/elie-herrera/VS-Code-Setup/main/setup.py)"
 ```
 
 Follow the instructions and that's it :D
