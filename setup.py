@@ -9,6 +9,27 @@ import sys
 
 options = { 'settings': '', 'extensions': '', }
 
+def read_json_file(file_path):
+	try:
+		with open(file_path, 'r') as file:
+			return json.load(file)
+	except json.JSONDecodeError:
+		print(f"Error: {file_path} contains invalid JSON. Please check the file format.")
+		sys.exit(1)
+	except FileNotFoundError:
+		print(f"Error: {file_path} not found. A new file will be created.")
+	except Exception as e:
+		print(f"Unexpected error reading {file_path}: {e}")
+		sys.exit(1)
+	return {}
+
+def write_json_file(file_path, data):
+	try:
+		with open(file_path, 'w') as file:
+			json.dump(data, file, sort_keys=True, indent=4, separators=(',', ': '))
+	except Exception as e:
+		print(f"Unexpected error writing to {file_path}: {e}")
+
 # Welcome Message
 print ("\n\nHi ... Welcome to VS Code Setup\n")
 
@@ -70,26 +91,24 @@ if options['settings'] == 'y':
 		os.makedirs(os.path.dirname(vscode_settings_path))
 
 	# Read existing settings and update them
-	prefs = {}
-	if os.path.isfile(vscode_settings_path):
-		with open(vscode_settings_path, 'r') as f:
-			prefs_plain = f.read()
-			if prefs_plain:
-				prefs = json.loads(prefs_plain)
-	
+	prefs = read_json_file(vscode_settings_path)
 	for key, value in settings_json.items():
 		prefs.setdefault(key, value)
 
 	# Write updated settings
-	with open(vscode_settings_path, 'w') as f:
-		print("Configuring Default Settings")
-		f.write(json.dumps(prefs, sort_keys=True, indent=4, separators=(',', ': ')))
+	print("Configuring Default Settings")
+	write_json_file(vscode_settings_path, prefs)
 
 # Install extensions
 if options['extensions'] == 'y':
 	print ("Installing VS Code Extensions")
 	for extension in extensions:
-		subprocess.run(["code", "--install-extension", extension], check=True)
+		try:
+			subprocess.run(["code", "--install-extension", extension], check=True)
+		except subprocess.CalledProcessError as e:
+			print(f"Failed to install extension {extension}: {e}")
+		except Exception as e:
+			print(f"Unexpected error installing extension {extension}: {e}")
 
 # Done
-show_notification("All done! Enjoy your new VS Code Settings & Extensions!")
+show_notification("All done! Enjoy your new VS Code!")
