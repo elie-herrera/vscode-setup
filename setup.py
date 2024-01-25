@@ -9,6 +9,13 @@ import sys
 
 options = { 'settings': '', 'extensions': '', }
 
+def is_code_command_available():
+	try:
+		subprocess.run(["code", "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+		return True
+	except Exception:
+		return False
+		
 def read_json_file(file_path):
 	try:
 		with open(file_path, 'r') as file:
@@ -100,15 +107,33 @@ if options['settings'] == 'y':
 	write_json_file(vscode_settings_path, prefs)
 
 # Install extensions
-if options['extensions'] == 'y':
-	print ("Installing VS Code Extensions")
+installed_extensions = []
+if options['extensions'] == 'y' and is_code_command_available():
+	print("Installing VS Code Extensions")
 	for extension in extensions:
 		try:
 			subprocess.run(["code", "--install-extension", extension], check=True)
+			installed_extensions.append(extension)
 		except subprocess.CalledProcessError as e:
 			print(f"Failed to install extension {extension}: {e}")
 		except Exception as e:
 			print(f"Unexpected error installing extension {extension}: {e}")
+else:
+	print("VS Code command line tool ('code') is not available. Please install it first.")
+
+# Display final settings.json
+print("\nFinal VS Code Settings:")
+try:
+	final_settings = read_json_file(vscode_settings_path)
+	print(json.dumps(final_settings, indent=4))
+except Exception as e:
+	print(f"Error displaying final settings: {e}")
+
+# Summary of actions
+print("\nSummary of Actions:")
+print("Installed Extensions:")
+for extension in installed_extensions:
+	print(f" - {extension}")
 
 # Done
 show_notification("All done! Enjoy your new VS Code!")
